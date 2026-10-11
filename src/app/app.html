@@ -1,0 +1,174 @@
+
+<div class="pagina">
+
+  <header class="encabezado">
+    <div>
+      <p class="subtitulo">SISTEMA COMERCIAL</p>
+      <h1>Backus Ventas</h1>
+      <p>Panel de control de vendedores</p>
+    </div>
+
+    <div
+      class="estado"
+      [class.conectado]="online"
+      [class.desconectado]="!online">
+
+      <span class="punto"></span>
+      {{ online ? 'CONECTADO' : 'SIN CONEXIÓN' }}
+    </div>
+  </header>
+
+  <section class="resumen">
+
+    <article class="tarjeta">
+      <span class="icono">🌐</span>
+      <h3>Conexión</h3>
+      <p>
+        {{ online ? 'Internet disponible' : 'Trabajando sin conexión' }}
+      </p>
+    </article>
+
+    <article class="tarjeta">
+      <span class="icono">📱</span>
+      <h3>Service Worker</h3>
+
+      <p>
+        {{ serviceWorkerActivo ? 'Activo' : 'No activo' }}
+      </p>
+
+      <button
+        class="boton-secundario"
+        (click)="comprobarServiceWorker()">
+        Comprobar estado
+      </button>
+    </article>
+
+    <article class="tarjeta">
+      <span class="icono">📦</span>
+      <h3>Catálogo</h3>
+      <p>{{ productos.length }} productos disponibles</p>
+    </article>
+
+  </section>
+
+  <section class="panel">
+
+    <div class="titulo-seccion">
+      <h2>Catálogo de productos</h2>
+      <p>Selecciona un producto para registrar un pedido.</p>
+    </div>
+
+    <div class="productos">
+
+      @for (producto of productos; track producto.id) {
+        <article class="producto">
+
+          <div class="producto-icono">🍺</div>
+
+          <div class="producto-info">
+            <h3>{{ producto.producto }}</h3>
+            <p>{{ producto.categoria }}</p>
+            <strong>S/ {{ producto.precio.toFixed(2) }}</strong>
+          </div>
+
+          <button
+            class="boton"
+            (click)="registrarPedido(producto)">
+            Registrar pedido
+          </button>
+
+        </article>
+      }
+
+    </div>
+  </section>
+
+  <section class="panel">
+
+    <div class="titulo-seccion">
+      <h2>Mis pedidos registrados</h2>
+      <p>Consulta los productos que has registrado.</p>
+    </div>
+
+    <div class="contador-pedidos">
+      Total de pedidos: {{ pedidos.length }}
+    </div>
+
+    @if (pedidos.length === 0) {
+
+      <div class="sin-pedidos">
+        <span>📋</span>
+        <h3>No tienes pedidos todavía</h3>
+        <p>Selecciona un producto del catálogo para comenzar.</p>
+      </div>
+
+    } @else {
+
+      <div class="lista-pedidos">
+
+        @for (pedido of pedidos; track pedido.id) {
+          <article class="pedido">
+
+            <div class="pedido-icono">📦</div>
+
+            <div class="pedido-info">
+              <h3>{{ pedido.producto }}</h3>
+              <p>Fecha: {{ pedido.fecha }}</p>
+              <strong>S/ {{ pedido.precio.toFixed(2) }}</strong>
+            </div>
+
+            <span
+              class="etiqueta-estado"
+              [class.pendiente]="pedido.estado === 'Pendiente'">
+              {{ pedido.estado }}
+            </span>
+
+            <button
+              class="boton-eliminar"
+              (click)="eliminarPedido(pedido.id)">
+              Eliminar
+            </button>
+
+          </article>
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+  <section class="panel">
+
+    <h2>Mensaje del vendedor</h2>
+
+    <p class="descripcion">
+      Guarda tus mensajes aunque pierdas temporalmente la conexión.
+    </p>
+
+    <label for="mensaje">Escribe tu mensaje</label>
+
+    <textarea
+      id="mensaje"
+      [(ngModel)]="mensaje"
+      placeholder="Escribe aquí tu mensaje..."
+      rows="4">
+    </textarea>
+
+    <button
+      class="boton guardar"
+      (click)="guardarMensaje()">
+      Guardar mensaje
+    </button>
+
+    @if (aviso) {
+      <p class="aviso" role="status">{{ aviso }}</p>
+    }
+
+  </section>
+
+  <footer>
+    Backus Ventas PWA · Proyecto educativo Angular
+  </footer>
+
+</div>

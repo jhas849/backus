@@ -1,0 +1,12 @@
+
+{
+  "name": "catalogo",
+  "urls": [
+    "/data/catalogo.json"
+  ],
+  "cacheConfig": {
+    "strategy": "performance",
+    "maxSize": 20,
+    "maxAge": "1d"
+  }
+}
